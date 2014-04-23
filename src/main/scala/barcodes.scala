@@ -22,22 +22,26 @@ object DNABarcodes extends App {
 		}
 	}
 
-	def checkCode(barcode: Array[Char]) : Array[Char] = {
+	def checkCode74(barcode: Array[Char]) : Array[Char] = {
 		val quadCode = barcode.map(codex(_))
-		val p1 = calculateParityBit(Array(quadCode(0),quadCode(2),quadCode(4),quadCode(6)))
-		val p2 = calculateParityBit(Array(quadCode(1),quadCode(2),quadCode(5),quadCode(6)))
-		val p3 = calculateParityBit(Array(quadCode(3),quadCode(4),quadCode(5),quadCode(6)))
-		val parity = Array(p1,p2,p3)
+		val parity = parity74(quadCode)
 		println("Parity Code: "+parity.mkString("-"))
 		val errType = parity.max
 		if(errType > 0) {
-			val binCode = quad2bin(Array(p3,p2,p1))
+			val binCode = quad2bin(parity)
 			val errorPosition = getErrorPosition(binCode)
 			println("ErrorPosition:"+errorPosition)
 			val trueBase = correctBase(errType,quadCode(errorPosition))
 			val correctedBarcode = barcode
 			correctedBarcode(errorPosition) = trueBase
-			return correctedBarcode
+			val secondParity = parity74(correctedBarcode.map(codex(_)))
+			println(secondParity.mkString("-"))
+			if (secondParity.max > 0) {
+				return Array.fill(7) {'N'}
+			}
+			else {
+				return correctedBarcode
+			}
 		}
 		else {
 			return barcode
@@ -47,6 +51,14 @@ object DNABarcodes extends App {
 	def quad2bin(code: Array[Int]) : Array[Int] = {
 		code.map(el => {if(el > 0) 1 ; else 0})
 	}
+
+	def parity74(quadCode: Array[Int]) : Array[Int] = {
+		val p1 = calculateParityBit(Array(quadCode(0),quadCode(2),quadCode(4),quadCode(6)))
+		val p2 = calculateParityBit(Array(quadCode(1),quadCode(2),quadCode(5),quadCode(6)))
+		val p3 = calculateParityBit(Array(quadCode(3),quadCode(4),quadCode(5),quadCode(6)))
+		return Array(p3,p2,p1)	
+	} 
+	
 
 	def calculateParityBit(codeBits: Array[Int]) : Int = {
 		codeBits.sum % 4 
@@ -77,10 +89,16 @@ object DNABarcodes extends App {
 	println("Original Code: " + code.mkString)
 	val wrongCode = code
 	wrongCode(4) = 'G'
+	//wrongCode(3) = 'T'
 	println("Wrong Code: "+wrongCode.mkString)
-	val corrected = checkCode(wrongCode)
+	val corrected = checkCode74(wrongCode)
 	println("Corrected Code: "+ corrected.mkString)
-
+	if(code == corrected) {
+		println("OK")
+	}
+	else {
+		println("ERROR")
+	}
 // END TEST ZONE
 
 }
