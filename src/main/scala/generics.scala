@@ -2,10 +2,10 @@ package DNABarcodes {
 
 	class Generics {
 		
-		val codex = Map[Char,Int]('A'-> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
-		val codexReverse = Map[Int,Char](0 -> 'A', 1 -> 'C', 2 -> 'G', 3 -> 'T')
+		protected val codex = Map[Char,Int]('A'-> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
+		protected val codexReverse = Map[Int,Char](0 -> 'A', 1 -> 'C', 2 -> 'G', 3 -> 'T')
 
-		def generateParityBit(codeLength: Int, codeBits: Array[Int]) : Int = {
+		protected def generateParityBit(codeLength: Int, codeBits: Array[Int]) : Int = {
 			val bit = ((codeLength - codeBits.sum) % 4) % 4
 			if(bit < 0) {
 				return bit + codeLength
@@ -15,15 +15,15 @@ package DNABarcodes {
 			}
 		}
 
-		def calculateParityBit(codeBits: Array[Int]) : Int = {
+		protected def calculateParityBit(codeBits: Array[Int]) : Int = {
 			codeBits.sum % 4 
 		}
 
-		def quad2dna(hamming: Array[Int]) : Array[Char] = {
+		protected def quad2dna(hamming: Array[Int]) : Array[Char] = {
 			hamming.map(codexReverse(_))
 		}
 
-		def correctBase(errType: Int, baseAtError: Int) : Char  = {
+		protected def correctBase(errType: Int, baseAtError: Int) : Char  = {
 			val bit = (baseAtError - errType) % 4
 			if (bit < 0) {
 				return codexReverse(bit + 4)
