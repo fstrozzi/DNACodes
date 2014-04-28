@@ -1,7 +1,11 @@
 package DNABarcodes {
 
-	class Generics {
+	abstract class Generics {
 		
+
+		var checksum : Boolean
+		var errorCorrected : String
+
 		protected val codex = Map[Char,Int]('A'-> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
 		protected val codexReverse = Map[Int,Char](0 -> 'A', 1 -> 'C', 2 -> 'G', 3 -> 'T')
 

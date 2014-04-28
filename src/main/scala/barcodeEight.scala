@@ -1,8 +1,8 @@
 package DNABarcodes {
-	class barcodeEight extends Generics {
+	class barcodeEight extends Generics with barcodeGenerator {
 	
-
-		var checksum = false
+		var checksum : Boolean = false
+		var errorCorrected : String = _
 
 		def generateBarcode(dna: String) : String = {
 			val data = dna.toCharArray.map(codex(_))
@@ -10,19 +10,22 @@ package DNABarcodes {
 			val p1 = generateParityBit(codeLength, Array(data(0),data(1),data(3)))
 			val p2 = generateParityBit(codeLength, Array(data(0),data(2),data(3)))
 			val p3 = generateParityBit(codeLength, Array(data(1),data(2),data(3)))
-			val p4 = generateParityBit(codeLength, data)
+			val p4 = generateParityBit(codeLength, Array(p1,p2,data(0),p3,data(1),data(2),data(3)))
 			val hamming = Array(p1,p2,data(0),p3,data(1),data(2),data(3),p4)
 			quad2dna(hamming).mkString
 		}
 	
-
 		// TODO REFACTOR TO MAKE IT MORE DRY
 		def checkBarcode(barcode: String) : String = {
 			val quadCode = barcode.toCharArray.map(codex(_))
 			val parity = parity84(quadCode)
 			val errType = parity.dropRight(1).max
 			val extraParity = parity(3)
-			if (errType > 0 && extraParity == 0) {
+			println(parity.mkString("-"))
+			/*if (errType > 0 && extraParity > 0) {
+				return uncorrectableCode('N').mkString
+			}*/
+			if(errType == 0 && extraParity > 0) {
 				return uncorrectableCode('N').mkString
 			}
 			else if (errType > 0) {
@@ -30,14 +33,15 @@ package DNABarcodes {
 				val trueBase = correctBase(errType,quadCode(errorPosition))
 				val correctedBarcode = barcode.toCharArray
 				correctedBarcode(errorPosition) = trueBase
-				val secondParity = parity84(correctedBarcode.map(codex(_)))
+				/*val secondParity = parity84(correctedBarcode.map(codex(_)))
 				if(secondParity.dropRight(1).max > 0) {
 					return uncorrectableCode('N').mkString
 				}
 				else {	
 					this.checksum = true
+					this.errorCorrected = "" */
 					return correctedBarcode.mkString
-				}
+				//}
 			}
 			this.checksum = true
 			return barcode.mkString
