@@ -3,31 +3,38 @@ package DNABarcodes {
 	abstract class Generics {
 		
 
-		var checksum : Boolean
-		var errorCorrected : String
-
 		protected val codex = Map[Char,Int]('A'-> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
 		protected val codexReverse = Map[Int,Char](0 -> 'A', 1 -> 'C', 2 -> 'G', 3 -> 'T')
 
 		protected def generateParityBit(codeLength: Int, codeBits: Array[Int]) : Int = {
-			val bit = ((codeLength - codeBits.sum) % 4) % 4
+			val bit = ((4 - codeBits.sum) % 4) % 4
 			if(bit < 0) {
-				return bit + codeLength
+				return bit + 4
 			}
 			else {
 				return bit
 			}
 		}
 
-		protected def calculateParityBit(codeBits: Array[Int]) : Int = {
-			codeBits.sum % 4 
+		protected def getErrorPosition(parity: Array[Int], parityPositions: Array[Int]) : Int = {
+			var finalPosition = 0
+			parity.zipWithIndex.foreach { el => // (parityBit,position)
+				if(el._1 != 0) {
+					finalPosition += parityPositions(el._2)
+				}
+			}
+			finalPosition - 1
+		}
+		
+		protected def calculateParityBit(codeLength: Int,codeBits: Array[Int]) : Int = {
+			return codeBits.sum % 4 
 		}
 
 		protected def quad2dna(hamming: Array[Int]) : Array[Char] = {
 			hamming.map(codexReverse(_))
 		}
 
-		protected def correctBase(errType: Int, baseAtError: Int) : Char  = {
+		protected def correctBase(codeLength: Int, errType: Int, baseAtError: Int) : Char  = {
 			val bit = (baseAtError - errType) % 4
 			if (bit < 0) {
 				return codexReverse(bit + 4)
@@ -36,5 +43,20 @@ package DNABarcodes {
 				return codexReverse(bit)
 			}
 		}
+		
+		def correctBarcode(codeLength: Int, barcode: String, getParity: (Int,Array[Int]) => Array[Int], parityPositions: Array[Int]) : String = {
+			val quadCode = barcode.toCharArray.map(codex(_))
+			val parity = getParity(codeLength,quadCode)
+			val errType = parity.max
+			if (errType > 0) {
+				val errorPosition = getErrorPosition(parity,parityPositions)
+				val trueBase = correctBase(codeLength,errType,quadCode(errorPosition))
+				val correctedBarcode = barcode.toCharArray
+				correctedBarcode(errorPosition) = trueBase
+				return correctedBarcode.mkString
+				}
+			return barcode.mkString
+		}
+
 	}
 }
