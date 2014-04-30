@@ -4,7 +4,7 @@ import TestHelpers._
 
 class Hamming106Test extends FlatSpec with Matchers {
 	
-	val b = new Hamming106()
+/*	val b = new Hamming106()
 	"verifyBarcode" should "check and correct a single error in every position" in {
 		val trueBarcode = b.generateBarcode("ACTAGC")
 		
@@ -48,5 +48,5 @@ class Hamming106Test extends FlatSpec with Matchers {
 			}
 		}
 	}
-
+*/
 }

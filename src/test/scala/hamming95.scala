@@ -3,7 +3,7 @@ import org.scalatest._
 import TestHelpers._
 
 class Hamming95Test extends FlatSpec with Matchers {
-	
+/*	
 	val b = new Hamming95()
 	
 	"verifyBarcode" should "check and correct a single error in every position" in {
@@ -52,4 +52,5 @@ class Hamming95Test extends FlatSpec with Matchers {
 		}
 
 	}
+	*/
 }

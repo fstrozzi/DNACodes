@@ -46,15 +46,27 @@ package DNABarcodes {
 		
 		def correctBarcode(codeLength: Int, barcode: String, getParity: (Int,Array[Int]) => Array[Int], parityPositions: Array[Int]) : String = {
 			val quadCode = barcode.toCharArray.map(codex(_))
-			val parity = getParity(codeLength,quadCode)
+			val doubleParity = getParity(codeLength,quadCode)
+			println("PARITY:"+doubleParity.mkString("-"))
+			val parity = doubleParity.dropRight(1)
+			val extraParity = doubleParity.last
 			val errType = parity.max
-			if (errType > 0) {
+			if (errType > 0 && extraParity == errType) {
 				val errorPosition = getErrorPosition(parity,parityPositions)
 				val trueBase = correctBase(codeLength,errType,quadCode(errorPosition))
 				val correctedBarcode = barcode.toCharArray
 				correctedBarcode(errorPosition) = trueBase
 				return correctedBarcode.mkString
-				}
+			}
+			else if (errType > 0 && extraParity != errType) {
+				return "XXXXX"
+			}
+			// WE KNOW THE ERROR IS IN THE EXTRA PARITY BIT SO RUN ITERATIVELY TO FIND THE CORRECT BASE
+			else if (errType == 0 && extraParity != 0) {
+				val correctedBarcode = barcode.toCharArray
+				correctedBarcode(correctedBarcode.size-1) = codexReverse(extraParity)
+				return correctedBarcode.mkString
+			}
 			return barcode.mkString
 		}
 
