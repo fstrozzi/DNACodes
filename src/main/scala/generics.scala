@@ -51,23 +51,29 @@ package DNABarcodes {
 			val parity = doubleParity.dropRight(1)
 			val extraParity = doubleParity.last
 			val errType = parity.max
-			if (errType > 0 && extraParity == errType) {
+			if (errType > 0 && extraParity == errType) { // there is one correctable error
 				val errorPosition = getErrorPosition(parity,parityPositions)
 				val trueBase = correctBase(codeLength,errType,quadCode(errorPosition))
 				val correctedBarcode = barcode.toCharArray
 				correctedBarcode(errorPosition) = trueBase
 				return correctedBarcode.mkString
-			}
+			} // there are two or more errors
 			else if (errType > 0 && extraParity != errType) {
 				return "XXXXX"
 			}
-			// WE KNOW THE ERROR IS IN THE EXTRA PARITY BIT SO RUN ITERATIVELY TO FIND THE CORRECT BASE
+			// WE KNOW THE ERROR IS IN THE EXTRA PARITY BIT
 			else if (errType == 0 && extraParity != 0) {
 				val correctedBarcode = barcode.toCharArray
-				correctedBarcode(correctedBarcode.size-1) = codexReverse(extraParity)
+				val trueBase = (quadCode.last - extraParity )%4
+				if(trueBase < 0) {
+					correctedBarcode(correctedBarcode.size-1) = codexReverse(trueBase + 4)
+				}
+				else {
+					correctedBarcode(correctedBarcode.size-1) = codexReverse(trueBase)
+				}
 				return correctedBarcode.mkString
 			}
-			return barcode.mkString
+			return barcode.mkString // no errors detected
 		}
 
 	}
