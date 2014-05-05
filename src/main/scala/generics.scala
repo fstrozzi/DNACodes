@@ -1,4 +1,5 @@
-package DNABarcodes {
+package org.ptp	
+package DNABarcodes
 
 	abstract class Generics {
 		
@@ -92,4 +93,3 @@ package DNABarcodes {
 		}
 	
 	}
-}

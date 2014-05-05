@@ -1,4 +1,4 @@
-import DNABarcodes._
+import org.ptp.DNABarcodes._
 import org.scalatest._
 import TestHelpers._
 

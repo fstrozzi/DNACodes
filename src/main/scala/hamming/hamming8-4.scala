@@ -1,4 +1,6 @@
-package DNABarcodes {
+package org.ptp
+package DNABarcodes
+
 	class HammingEight extends Generics with barcodeGenerator {
 	
 		val parityPositions = Array(1,2,4)
@@ -29,4 +31,3 @@ package DNABarcodes {
 
 
 	}
-}
