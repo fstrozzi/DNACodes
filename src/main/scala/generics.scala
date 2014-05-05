@@ -47,21 +47,20 @@ package DNABarcodes {
 		def correctBarcode(codeLength: Int, barcode: String, getParity: (Int,Array[Int]) => Array[Int], parityPositions: Array[Int]) : String = {
 			val quadCode = barcode.toCharArray.map(codex(_))
 			val doubleParity = getParity(codeLength,quadCode)
-			println("PARITY:"+doubleParity.mkString("-"))
 			val parity = doubleParity.dropRight(1)
 			val extraParity = doubleParity.last
 			val errType = parity.max
-			if (errType > 0 && extraParity == errType) { // there is one correctable error
+			if (doubleParity.to[Set].size > 2) {
+				return "XXXXX"
+			}
+			else if (errType > 0 && extraParity == errType) { // there is one correctable error
 				val errorPosition = getErrorPosition(parity,parityPositions)
 				val trueBase = correctBase(codeLength,errType,quadCode(errorPosition))
 				val correctedBarcode = barcode.toCharArray
 				correctedBarcode(errorPosition) = trueBase
 				return correctedBarcode.mkString
-			} // there are two or more errors
-			else if (errType > 0 && extraParity != errType) {
-				return "XXXXX"
-			}
-			// WE KNOW THE ERROR IS IN THE EXTRA PARITY BIT
+			} 
+			// THE ERROR IS IN THE EXTRA PARITY BIT
 			else if (errType == 0 && extraParity != 0) {
 				val correctedBarcode = barcode.toCharArray
 				val trueBase = (quadCode.last - extraParity )%4
@@ -72,6 +71,9 @@ package DNABarcodes {
 					correctedBarcode(correctedBarcode.size-1) = codexReverse(trueBase)
 				}
 				return correctedBarcode.mkString
+			}
+			else if (errType != extraParity) { // there are two or more uncorrectable errors
+				return "XXXXX"
 			}
 			return barcode.mkString // no errors detected
 		}
