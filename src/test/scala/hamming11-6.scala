@@ -2,9 +2,9 @@ import DNABarcodes._
 import org.scalatest._
 import TestHelpers._
 
-class Hamming106Test extends FlatSpec with Matchers {
+class HammingElevenTest extends FlatSpec with Matchers {
 	
-	val b = new Hamming106()
+	val b = new HammingEleven()
 	"verifyBarcode" should "check and correct a single error in every position" in {
 		val trueBarcode = b.generateBarcode("ACTAGC")
 		checkTheBarcode(trueBarcode)

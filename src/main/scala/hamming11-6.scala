@@ -1,5 +1,5 @@
 package DNABarcodes {
-	class Hamming106 extends Generics with barcodeGenerator {
+	class HammingEleven extends Generics with barcodeGenerator {
 	
 		val parityPositions = Array(1,2,4,8)
 		val codeLength = 6
