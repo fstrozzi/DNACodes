@@ -51,7 +51,7 @@ package DNABarcodes {
 			val extraParity = doubleParity.last
 			val errType = parity.max
 			
-			if(doubleErrors(parity,extraParity,doubleParity)) {
+			if(doubleErrors(parity,extraParity,doubleParity,errType)) {
 				return "XXXXX" // there are two or more uncorrectable errors
 			}
 			else if (errType > 0 && extraParity == errType) { // there is one correctable error
@@ -76,17 +76,14 @@ package DNABarcodes {
 			return barcode.mkString // no errors detected
 		}
 
-		private def doubleErrors(parity: Array[Int],extraParity: Int, doubleParity: Array[Int]) : Boolean = {
+		private def doubleErrors(parity: Array[Int],extraParity: Int, doubleParity: Array[Int], errType: Int) : Boolean = {
 			if (doubleParity.distinct.size > 2) {
 				return true
 			}
-/*			else if (extraParity != 0 && parity.distinct.size >= 3) {
-				return true
-			}*/
 			else if (parity.filter(_ != 0).distinct.size >= 2 && extraParity > 0) {
 				return true
 			}
-			else if (parity.max > 0 && extraParity != parity.max) {
+			else if (errType > 0 && extraParity != errType) {
 				return true
 			}
 			else {
