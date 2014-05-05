@@ -29,7 +29,7 @@ class HammingElevenTest extends FlatSpec with Matchers {
 		allCodes.size should be (4096)
 	}
 
-	"Hamming(11,6) codes" should "correct errors on all the possibile combinations of barcodes" in {
+	"Hamming(11,6) codes" should "correct single errors on all the possibile combinations of barcodes" in {
 		for (code <- allCodes) {
 			val trueBarcode = b.generateBarcode(code.mkString)
 			checkTheBarcode(trueBarcode)
@@ -49,11 +49,12 @@ class HammingElevenTest extends FlatSpec with Matchers {
 	}
 
 	"Hamming(11,6)" should "detect Double Errors" in {
-		
-		val trueBarcode = b.generateBarcode("CTGACT")
-		for (i <- Range(0,4096)) {
-			val wrongBarcode = randomMutation(trueBarcode,2)
-			b.verifyBarcode(wrongBarcode) should be ("XXXXX")
+		for (code <- allCodes) {
+			val trueBarcode = b.generateBarcode(code.mkString)
+			for (i <- Range(0,1000)) {
+				val wrongBarcode = randomMutation(trueBarcode,2)
+				b.verifyBarcode(wrongBarcode) should be ("XXXXX")
+			}
 		}
 	}
 }
