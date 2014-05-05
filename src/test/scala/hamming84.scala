@@ -6,27 +6,31 @@ class Hamming84Test extends FlatSpec with Matchers {
 
 	val b = new Hamming84()
 	"verifyBarcode" should "check and correct a single error in every position" in {
-		val trueBarcode = b.generateBarcode("AATA")
+		val trueBarcode = b.generateBarcode("ACTC")
+		println(trueBarcode)
 		checkTheBarcode(trueBarcode)
 		
 		def checkTheBarcode(barcode: String) {
 			val alphabet = Array('A','T','C','G')
-			for (i <- Range(0,barcode.size)) {
+			//for (i <- Range(0,barcode.size)) {
+				val i = barcode.size -1
 				for (base <- alphabet) {
 					val wrongBarcode = barcode.toCharArray
 					wrongBarcode(i) = base
+					println("WRONG BARCODE:"+wrongBarcode.mkString)
+					if (wrongBarcode.mkString == trueBarcode) println(wrongBarcode.mkString) 
 					val correctedBarcode = b.verifyBarcode(wrongBarcode.mkString)
 					correctedBarcode should be (trueBarcode)
 				}
-			}
+			//}
 		}
 
 	}
 
-
-	"Hamming(8,4)" should "detect Double Errors" in {
+	/*"Hamming(8,4)" should "detect Double Errors" in {
 		
 		val trueBarcode = b.generateBarcode("AAAC")
+		println(trueBarcode)
 							//  TTATAACG		
 		val wrong1 = "TGATAACA" 
 		val wrong2 = "CGATAACG"
@@ -41,7 +45,8 @@ class Hamming84Test extends FlatSpec with Matchers {
 		b.verifyBarcode(wrong4) should be ("XXXXX")
 		b.verifyBarcode(wrongTriple) should be ("XXXXX")
 
-	}
+	}*/
+/*
 
 	val allCodes = permutationsWithRepetitions(List("A","T","C","G"),4)
 	
@@ -67,5 +72,5 @@ class Hamming84Test extends FlatSpec with Matchers {
 			}
 		}
 	}
-
+*/
 }
