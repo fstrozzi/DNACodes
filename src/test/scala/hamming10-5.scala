@@ -54,10 +54,8 @@ class HammingTenTest extends FlatSpec with Matchers {
 	"Hamming(10,5)" should "detect Double Errors" in {
 		
 		val trueBarcode = b.generateBarcode("CTGAC")
-		println(trueBarcode)
 		for (i <- Range(0,1024)) {
 			val wrongBarcode = randomMutation(trueBarcode,2)
-			println(wrongBarcode)
 			b.verifyBarcode(wrongBarcode) should be ("XXXXX")
 		}
 	}

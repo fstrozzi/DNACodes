@@ -31,10 +31,8 @@ class HammingEightTest extends FlatSpec with Matchers {
 	"Hamming(8,4)" should "detect Double Errors" in {
 		
 		val trueBarcode = b.generateBarcode("AAAC")
-		println(trueBarcode)
 		for (i <- Range(0,256)) {
 			val wrongBarcode = randomMutation(trueBarcode,2)
-			println(wrongBarcode)
 			b.verifyBarcode(wrongBarcode) should be ("XXXXX")
 		}
 		

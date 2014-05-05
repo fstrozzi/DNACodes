@@ -23,7 +23,6 @@ package DNABarcodes {
 			val p2 = calculateParityBit(codeLength,Array(quadCode(1),quadCode(2),quadCode(5),quadCode(6)))
 			val p3 = calculateParityBit(codeLength,Array(quadCode(3),quadCode(4),quadCode(5),quadCode(6)))
 			val p4 = calculateParityBit(codeLength,quadCode)
-			println(Array(p1,p2,p3,p4).mkString("-"))
 			return Array(p1,p2,p3,p4)	
 		} 
 		

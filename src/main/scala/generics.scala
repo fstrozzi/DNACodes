@@ -47,7 +47,6 @@ package DNABarcodes {
 		def correctBarcode(codeLength: Int, barcode: String, getParity: (Int,Array[Int]) => Array[Int], parityPositions: Array[Int]) : String = {
 			val quadCode = barcode.toCharArray.map(codex(_))
 			val doubleParity = getParity(codeLength,quadCode)
-			println(doubleParity.mkString("-"))
 			val parity = doubleParity.dropRight(1)
 			val extraParity = doubleParity.last
 			val errType = parity.max
