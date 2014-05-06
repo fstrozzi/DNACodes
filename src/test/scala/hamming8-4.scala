@@ -4,9 +4,8 @@ import TestHelpers._
 
 class HammingEightTest extends FlatSpec with Matchers {
 
-	val b = new HammingEight()
 	"verifyBarcode" should "check and correct a single error in every position" in {
-		val trueBarcode = b.generateBarcode("AATA")
+		val trueBarcode = HammingEight.generateBarcode("AATA")
 		checkTheBarcode(trueBarcode)
 		
 		def checkTheBarcode(barcode: String) {
@@ -15,7 +14,7 @@ class HammingEightTest extends FlatSpec with Matchers {
 				for (base <- alphabet) {
 					val wrongBarcode = barcode.toCharArray
 					wrongBarcode(i) = base
-					val correctedBarcode = b.verifyBarcode(wrongBarcode.mkString)
+					val correctedBarcode = HammingEight.verifyBarcode(wrongBarcode.mkString)
 					correctedBarcode should be (trueBarcode)
 				}
 			}
@@ -30,10 +29,10 @@ class HammingEightTest extends FlatSpec with Matchers {
 
 	"Hamming(8,4)" should "detect Double Errors" in {
 		for (code <- allCodes) {
-			val trueBarcode = b.generateBarcode(code.mkString)
+			val trueBarcode = HammingEight.generateBarcode(code.mkString)
 			for (i <- Range(0,1000)) {
 				val wrongBarcode = randomMutation(trueBarcode,2)
-				b.verifyBarcode(wrongBarcode) should be ("XXXXX")
+				HammingEight.verifyBarcode(wrongBarcode) should be ("XXXXX")
 			}
 		}
 		
@@ -42,7 +41,7 @@ class HammingEightTest extends FlatSpec with Matchers {
 	
 	"Hamming(8,4) codes" should "correct single errors on all the possibile combinations of barcodes" in {
 		for (code <- allCodes) {
-			val trueBarcode = b.generateBarcode(code.mkString)
+			val trueBarcode = HammingEight.generateBarcode(code.mkString)
 			checkTheBarcode(trueBarcode)
 			
 			def checkTheBarcode(barcode: String) {
@@ -51,7 +50,7 @@ class HammingEightTest extends FlatSpec with Matchers {
 					for (base <- alphabet) {
 						val wrongBarcode = barcode.toCharArray
 						wrongBarcode(i) = base
-						val correctedBarcode = b.verifyBarcode(wrongBarcode.mkString)
+						val correctedBarcode = HammingEight.verifyBarcode(wrongBarcode.mkString)
 						correctedBarcode should be (trueBarcode)
 					}
 				}

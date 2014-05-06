@@ -4,17 +4,15 @@ import TestHelpers._
 
 class HammingTenTest extends FlatSpec with Matchers {
 
-	val b = new HammingTen()
-	
 	"verifyBarcode" should "check and correct a single error in every position" in {
-		val trueBarcode =  b.generateBarcode("ACTAC")
+		val trueBarcode =  HammingTen.generateBarcode("ACTAC")
 		def checkTheBarcode(barcode: String) {
 			val alphabet = Array('A','T','C','G') 
 			for (i <- Range(0,barcode.size)) {
 				for (base <- alphabet) {
 					val wrongBarcode = barcode.toCharArray
 					wrongBarcode(i) = base
-					val correctedBarcode = b.verifyBarcode(wrongBarcode.mkString)
+					val correctedBarcode = HammingTen.verifyBarcode(wrongBarcode.mkString)
 					correctedBarcode should be (trueBarcode)
 				}
 			}
@@ -32,7 +30,7 @@ class HammingTenTest extends FlatSpec with Matchers {
 
 	"Hamming(10,5) codes" should "correct single errors for all the possibile combinations of barcodes" in {
 		for (code <- allCodes) {
-			val trueBarcode = b.generateBarcode(code.mkString)
+			val trueBarcode = HammingTen.generateBarcode(code.mkString)
 			checkTheBarcode(trueBarcode)
 			
 			def checkTheBarcode(barcode: String) {
@@ -41,7 +39,7 @@ class HammingTenTest extends FlatSpec with Matchers {
 					for (base <- alphabet) {
 						val wrongBarcode = barcode.toCharArray
 						wrongBarcode(i) = base
-						val correctedBarcode = b.verifyBarcode(wrongBarcode.mkString)
+						val correctedBarcode = HammingTen.verifyBarcode(wrongBarcode.mkString)
 						correctedBarcode should be (trueBarcode)
 					}
 				}
@@ -53,10 +51,10 @@ class HammingTenTest extends FlatSpec with Matchers {
 	
 	"Hamming(10,5)" should "detect Double Errors" in {
 		for (code <- allCodes) {	
-			val trueBarcode = b.generateBarcode(code.mkString)
+			val trueBarcode = HammingTen.generateBarcode(code.mkString)
 			for (i <- Range(0,1000)) {
 				val wrongBarcode = randomMutation(trueBarcode,2)
-				b.verifyBarcode(wrongBarcode) should be ("XXXXX")
+				HammingTen.verifyBarcode(wrongBarcode) should be ("XXXXX")
 			}
 		}
 	}
