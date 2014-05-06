@@ -1,6 +1,6 @@
 package org.ptp
 package DNABarcodes
-	class HammingTen extends Generics with barcodeGenerator {
+	object HammingTen extends Generics with barcodeGenerator {
 	
 		val parityPositions = Array(1,2,4,8)
 		val codeLength = 5

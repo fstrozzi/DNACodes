@@ -53,7 +53,7 @@ package DNABarcodes
 			val errType = parity.max
 			
 			if(doubleErrors(parity,extraParity,doubleParity,errType)) {
-				return "XXXXX" // there are two or more uncorrectable errors
+				return "NNNNN" // there are two or more uncorrectable errors
 			}
 			else if (errType > 0 && extraParity == errType) { // there is one correctable error
 				val errorPosition = getErrorPosition(parity,parityPositions)
