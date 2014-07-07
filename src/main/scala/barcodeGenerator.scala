@@ -1,3 +1,4 @@
+package org.ptp
 package DNABarcodes {
 
 	trait barcodeGenerator {
