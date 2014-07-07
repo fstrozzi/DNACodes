@@ -54,7 +54,7 @@ class HammingTenTest extends FlatSpec with Matchers {
 			val trueBarcode = HammingTen.generateBarcode(code.mkString)
 			for (i <- Range(0,1000)) {
 				val wrongBarcode = randomMutation(trueBarcode,2)
-				HammingTen.verifyBarcode(wrongBarcode) should be ("XXXXX")
+				HammingTen.verifyBarcode(wrongBarcode) should be ("NNNNN")
 			}
 		}
 	}

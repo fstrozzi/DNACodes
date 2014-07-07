@@ -32,7 +32,7 @@ class HammingEightTest extends FlatSpec with Matchers {
 			val trueBarcode = HammingEight.generateBarcode(code.mkString)
 			for (i <- Range(0,1000)) {
 				val wrongBarcode = randomMutation(trueBarcode,2)
-				HammingEight.verifyBarcode(wrongBarcode) should be ("XXXXX")
+				HammingEight.verifyBarcode(wrongBarcode) should be ("NNNNN")
 			}
 		}
 		
