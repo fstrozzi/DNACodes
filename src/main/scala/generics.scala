@@ -1,9 +1,10 @@
 package org.ptp	
 package DNABarcodes
 
+	/** Abstract class to include commong functions for DNA Barcodes generation and verification */
 	abstract class Generics {
 		
-
+		
 		protected val codex = Map[Char,Int]('A'-> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
 		protected val codexReverse = Map[Int,Char](0 -> 'A', 1 -> 'C', 2 -> 'G', 3 -> 'T')
 
@@ -44,7 +45,12 @@ package DNABarcodes
 				return codexReverse(bit)
 			}
 		}
-		
+		/** Attempt error correction on a Hamming barcode 
+		 * @param codeLength The length of the barcode
+			 @param barcode A string with the actual barcode
+			 @param getParity A function which calculates the parity of a barcode
+			 @param parityPositions An array which stores the positions of the parity bit in the Hamming barcode
+		*/
 		def correctBarcode(codeLength: Int, barcode: String, getParity: (Int,Array[Int]) => Array[Int], parityPositions: Array[Int]) : String = {
 			val quadCode = barcode.toCharArray.map(codex(_))
 			val doubleParity = getParity(codeLength,quadCode)

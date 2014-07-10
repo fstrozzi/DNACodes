@@ -1,11 +1,13 @@
 package org.ptp
 package DNABarcodes
-
+	/** Hamming(8,4) double parity error correcting barcode */
 	object HammingEight extends Generics with barcodeGenerator {
 	
 		val parityPositions = Array(1,2,4)
 		val codeLength = 4
-		
+		/** generate a new Hamming barcode with the starting DNA seed
+		 * @param dna The string with the DNA seed
+		*/
 		def generateBarcode(dna: String) : String = {
 			val data = dna.toCharArray.map(codex(_))
 			val p1 = generateParityBit(codeLength, Array(data(0),data(1),data(3)))
@@ -15,7 +17,9 @@ package DNABarcodes
 			val hamming = Array(p1,p2,data(0),p3,data(1),data(2),data(3),p4)
 			quad2dna(hamming).mkString
 		}
-
+		/** Check a barcode and error correct it
+		 * @param dna A string with the barcode to check
+		*/
 		def verifyBarcode(dna: String) : String = {
 			this.correctBarcode(codeLength,dna,getParity,parityPositions)
 		}
