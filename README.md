@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fstrozzi/DNACodes.svg?branch=master)](https://travis-ci.org/fstrozzi/DNACodes)
+
 DNACodes
 ========
 
@@ -9,13 +11,15 @@ The API is minimal and the documentation is available [here](http://fstrozzi.git
 
 ```scala
 import org.ptp.DNABarcodes._
+
 val barcode = HammingEight.generateBarcode("AATA")
 barcode.gc // %GC content
 
 // verify and correct a barcode
-
 val wrongBarcode = "ATCAGCAA"
-val correctedBarcode = HammingEight.verifyBarcode(wrongBarcode) // it wil be set to "NNNNN" if barcode can't be corrected
+val correctedBarcode = HammingEight.verifyBarcode(wrongBarcode) 
+correctedBarcode.verifiedBarcode	// return "NNNNN" if barcode can't be corrected
+correctedbarcode.errorCorrected // return TRUE if error correction was performed sucessfully
 
 ```
 
