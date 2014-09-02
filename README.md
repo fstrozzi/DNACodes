@@ -12,7 +12,7 @@ The API is minimal and the documentation is available [here](http://fstrozzi.git
 ```scala
 import org.ptp.DNABarcodes._
 
-val barcode = HammingEight.generateBarcode("AATA")
+val barcode = new DNABarcode("AATA")
 barcode.gc // %GC content
 
 // verify and correct a barcode
